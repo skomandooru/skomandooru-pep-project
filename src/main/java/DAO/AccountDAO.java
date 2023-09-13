@@ -14,12 +14,12 @@ public class AccountDAO {
 
     public Account insertAccount(Account account){
         try{
-            String sql = "select * from Account where username = ?";
+            String sql = "select * from account where username = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, account.getUsername());
             ResultSet rs = preparedStatement.executeQuery();
             if(rs.getRow() == 0){
-                String sql1 = "insert into Account (username,Password) values(?,?)";
+                String sql1 = "insert into account (username,password) values(?,?)";
                 preparedStatement = connection.prepareStatement(sql1, Statement.RETURN_GENERATED_KEYS);
                 preparedStatement.setString(1,account.getUsername());
                 preparedStatement.setString(2,account.getPassword());
