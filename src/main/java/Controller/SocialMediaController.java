@@ -88,11 +88,11 @@ public class SocialMediaController {
                     if(result!=null){
                         ctx.json(mapper.writeValueAsString(result));
                     } else{
-                        ctx.status(400);
+                        ctx.status(400); //400
                     }
                 }
                 else{
-                    ctx.status(400);
+                    ctx.status(400); //400
                 }
             }   
             
@@ -139,11 +139,11 @@ public class SocialMediaController {
                     if(result!=null){
                         ctx.json(mapper.writeValueAsString(result));
                     } else{
-                        ctx.status(400);
+                        ctx.status(400); //400
                     }
                 
                 }else{
-                    ctx.status(400);
+                    ctx.status(400); //400
                 }
             }
     
