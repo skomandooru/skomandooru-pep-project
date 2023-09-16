@@ -7,10 +7,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import Model.Account;
 import Model.Message;
+import Service.AccountService;
+import Service.MessageService;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 /**
- * TODO: You will need to write your own endpoints and handlers for your controller. The endpoints you will need can be
+ *TODO: You will need to write your own endpoints and handlers for your controller. The endpoints you will need can be
  * found in readme.md as well as the test cases. You should
  * refer to prior mini-project labs and lecture materials for guidance on how a controller may be built.
  */
@@ -24,12 +26,7 @@ public class SocialMediaController {
             Javalin app = Javalin.create();
             app.get("example-endpoint", this::exampleHandler);
             app.post("register",ctx -> {
-                try {
-                    postRegister(ctx);
-                } catch (JsonProcessingException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
+                register(ctx);
             });
             app.post("login",this::postLogin);
             app.post("messages",this::postMessage);
@@ -50,28 +47,43 @@ public class SocialMediaController {
             context.json("sample text");
         }
     
-        private void postRegister(Context ctx) throws JsonProcessingException {
-            ObjectMapper mapper = new ObjectMapper();
-            Account account = mapper.readValue(ctx.body(), Account.class);
-            if( account.getUsername()!="" && account.getPassword().length()>=4){
-                AccountService ac = new AccountService();
-                Account result = ac.insertAccount(account);
-                if(result!=null){
-                    ctx.json(mapper.writeValueAsString(result));
-                } else{
+        private void register(Context ctx) {
+            try {
+                ObjectMapper mapper = new ObjectMapper();
+                Account account = mapper.readValue(ctx.body().toString(), Account.class);
+
+                if (isBlank(account.getUsername()) || isPasswordTooShort(account.getPassword())) {
                     ctx.status(400);
+                    return;
                 }
-            }
-            else{
+
+                Account existingAccount = AccountService.findbyusername(account.getPassword());
+
+                Account registeredAccount = AccountService.findbyusername(account.getUsername());
+
+                String jsonRepresentation = mapper.writeValueAsString(registeredAccount);
+
+                ctx.status(200)
+                    .json(jsonRepresentation)
+                    .contentType("application/json");
+            } catch (Exception e) {
+                e.printStackTrace();
                 ctx.status(400);
             }
+        }
+
+        private boolean isBlank(String str) {
+            return str == null || str.trim().isEmpty();
+        }
+
+        private boolean isPasswordTooShort(String password) {
+            return password == null || password.length() < 5;
         }
     
         private void postLogin(Context ctx) throws JsonProcessingException {
             ObjectMapper mapper = new ObjectMapper();
             Account account = mapper.readValue(ctx.body(), Account.class);
-                AccountService ac = new AccountService();
-                Account result = ac.loginAccount(account);
+                Account result = existingAccount(account);
                 if(result!=null){
                     ctx.json(mapper.writeValueAsString(result));
                 } else{
@@ -79,6 +91,10 @@ public class SocialMediaController {
                 }
             }
     
+            private Account existingAccount(Account account) {
+            return null;
+        }
+
             private void postMessage(Context ctx) throws JsonProcessingException {
                 ObjectMapper mapper = new ObjectMapper();
                 Message message = mapper.readValue(ctx.body(), Message.class);

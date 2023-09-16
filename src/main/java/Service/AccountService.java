@@ -3,24 +3,25 @@ import DAO.AccountDAO;
 import Model.Account;
 
 public class AccountService {
-    private AccountDAO accountDao;
+    private static AccountDAO accountDao;
 
     public AccountService(){
         accountDao = new AccountDAO();
     }
 
     public AccountService(AccountDAO accountDao){
-        this.accountDao=accountDao;
+        AccountService.accountDao = accountDao;
     }
 
-    public Account insertAccount(Account account){
-        Account result = accountDao.insertAccount(account);
-        return result;
-
+    public void registerAccount(Account account) {
+        accountDao.register(account);
     }
 
-    public Account loginAccount(Account account){
-        Account result = accountDao.loginAccount(account);
-        return result;
-    }    
+    public static Account findbyusername(String username) {
+        return accountDao.findbyusername(username);
+    }
+
+    public Account findbyusernameAndpwd(String username, String password) {
+        return accountDao.findbyusernameAndpwd(username, password);
+    }
 }
