@@ -62,18 +62,18 @@ public class SocialMediaController {
                     ctx.status(400);
                     return;
                 }
-
-                Account postregisteredAccount = Service.AccountService.findbyusername(account.getUsername());
                 
+                Account postregisteredAccount = Service.AccountService.findbyusername(account.getUsername());
+
                 // Check if the username is already taken
                 if (postregisteredAccount != null) {
                     ctx.status(400); // 400 Conflict - Username already taken
                     return;
                 }
-
-                AccountService.registerAccount(postregisteredAccount);
-
-                String jsonRepresentation = mapper.writeValueAsString(postregisteredAccount);
+                
+                AccountService.registerAccount(account);
+                Account newAccount = Service.AccountService.findbyusername(account.getUsername());
+                String jsonRepresentation = mapper.writeValueAsString(newAccount);
 
                 ctx.status(200)
                     .json(jsonRepresentation)
