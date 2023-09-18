@@ -25,9 +25,7 @@ public class SocialMediaController {
         public Javalin startAPI() {
             Javalin app = Javalin.create();
             app.get("example-endpoint", this::exampleHandler);
-            app.post("register",ctx -> {
-                register(ctx);
-            });
+            app.post("register",this::register);
             app.post("login",this::postLogin);
             app.post("messages",this::postMessage);
             app.get("messages",this::getAllMessages);
@@ -60,6 +58,11 @@ public class SocialMediaController {
                 Account existingAccount = AccountService.findbyusername(account.getPassword());
 
                 Account registeredAccount = AccountService.findbyusername(account.getUsername());
+                // Check if the username is already taken
+                if (existingAccount != null) {
+                    ctx.status(409); // 409 Conflict - Username already taken
+                    return;
+                }
 
                 String jsonRepresentation = mapper.writeValueAsString(registeredAccount);
 
