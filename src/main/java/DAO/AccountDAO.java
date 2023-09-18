@@ -26,7 +26,7 @@ public class AccountDAO {
 
     public Account findbyusername(String username) {
         Connection connection = ConnectionUtil.getConnection();
-        try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT VALUES (?,?)")) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM account WHERE username = ?")) {
             preparedStatement.setString(1, username);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
