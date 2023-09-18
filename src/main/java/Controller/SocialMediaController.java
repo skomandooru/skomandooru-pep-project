@@ -60,7 +60,7 @@ public class SocialMediaController {
                 Account registeredAccount = AccountService.findbyusername(account.getUsername());
                 // Check if the username is already taken
                 if (existingAccount != null) {
-                    ctx.status(409); // 409 Conflict - Username already taken
+                    ctx.status(200); // 409 Conflict - Username already taken
                     return;
                 }
 
