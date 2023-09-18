@@ -17,6 +17,11 @@ import io.javalin.http.Context;
  * refer to prior mini-project labs and lecture materials for guidance on how a controller may be built.
  */
 public class SocialMediaController {
+        public SocialMediaController(){
+            new AccountService();
+            new MessageService();
+        }
+
         /**
          * In order for the test cases to work, you will need to write the endpoints in the startAPI() method, as the test
          * suite must receive a Javalin object from this method.
@@ -55,14 +60,20 @@ public class SocialMediaController {
                     return;
                 }
 
-                Account existingAccount = AccountService.findbyusername(account.getPassword());
+                // Initialize AccountService (assuming it's a class with a constructor)
+                AccountService accountService = new AccountService();
 
-                Account registeredAccount = AccountService.findbyusername(account.getUsername());
+                Account registeredAccount = Service.AccountService.findbyusername(account.getUsername());
                 // Check if the username is already taken
-                if (existingAccount != null) {
-                    ctx.status(200); // 409 Conflict - Username already taken
+                if (registeredAccount != null) {
+                    ctx.status(400); // 400 Conflict - Username already taken
                     return;
                 }
+
+                AccountService AccountService;
+                MessageService messageService;
+
+                accountService.registerAccount(account);
 
                 String jsonRepresentation = mapper.writeValueAsString(registeredAccount);
 
