@@ -17,9 +17,12 @@ import io.javalin.http.Context;
  * refer to prior mini-project labs and lecture materials for guidance on how a controller may be built.
  */
 public class SocialMediaController {
+        AccountService AccountService;
+        MessageService messageService;       
+
         public SocialMediaController(){
-            new AccountService();
-            new MessageService();
+            this.AccountService = new AccountService();
+            this.messageService = new MessageService();
         }
 
         /**
@@ -60,22 +63,17 @@ public class SocialMediaController {
                     return;
                 }
 
-                // Initialize AccountService (assuming it's a class with a constructor)
-                AccountService accountService = new AccountService();
-
-                Account registeredAccount = Service.AccountService.findbyusername(account.getUsername());
+                Account postregisteredAccount = Service.AccountService.findbyusername(account.getUsername());
+                
                 // Check if the username is already taken
-                if (registeredAccount != null) {
+                if (postregisteredAccount != null) {
                     ctx.status(400); // 400 Conflict - Username already taken
                     return;
                 }
 
-                AccountService AccountService;
-                MessageService messageService;
+                AccountService.registerAccount(postregisteredAccount);
 
-                accountService.registerAccount(account);
-
-                String jsonRepresentation = mapper.writeValueAsString(registeredAccount);
+                String jsonRepresentation = mapper.writeValueAsString(postregisteredAccount);
 
                 ctx.status(200)
                     .json(jsonRepresentation)
