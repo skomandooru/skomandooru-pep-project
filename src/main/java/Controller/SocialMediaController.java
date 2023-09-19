@@ -103,10 +103,6 @@ public class SocialMediaController {
             ctx.status(400);
         }
     }
-    
-    private Account existingAccount(Account account) {
-        return null;
-    }
 
     private void postMessage(Context ctx) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
