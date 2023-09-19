@@ -21,7 +21,7 @@ public class AccountService {
         return accountDao.findbyusername(username);
     }
 
-    public Account findbyusernameAndpwd(String username, String password) {
-        return accountDao.findbyusernameAndpwd(username, password);
+    public Account findbyusernameAndpwd(Account account) {
+        return accountDao.findbyusernameAndpwd(account);
     }
 }

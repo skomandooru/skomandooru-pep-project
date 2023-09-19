@@ -95,12 +95,13 @@ public class SocialMediaController {
     private void postLogin(Context ctx) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         Account account = mapper.readValue(ctx.body(), Account.class);
-        Account result = existingAccount(account);
+        //Account result = existingAccount(account);
             
-        if(result!=null){
-            ctx.json(mapper.writeValueAsString(result));
+        if(AccountService.findbyusernameAndpwd(account)!=null){
+            ctx.json(AccountService.findbyusernameAndpwd(account));
+            ctx.status(200);
         } else{
-            ctx.status(400);
+            ctx.status(401);
         }
     }
 

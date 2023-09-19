@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import Model.Account;
+import Service.AccountService;
 import Util.ConnectionUtil;
 
 public class AccountDAO {
@@ -41,7 +42,22 @@ public class AccountDAO {
         return null;
     }
 
-    public Account findbyusernameAndpwd(String username, String password) {
-        return null;
+    public Account findbyusernameAndpwd(Account account){
+        Connection connection = ConnectionUtil.getConnection();
+        
+        try {
+            String sql = "SELECT * FROM account WHERE username = ? AND password = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            preparedStatement.setString(1, account.getUsername());
+            preparedStatement.setString(2, account.getPassword());
+
+            ResultSet rs = preparedStatement.executeQuery();
+            rs.next();
+
+            return new Account(rs.getInt("account_id"), rs.getString("username"), rs.getString("password"));
+        } catch (SQLException e) {
+            e.getMessage();
+        } return null;
     } 
 }
